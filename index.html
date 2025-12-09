@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student ID Card Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .customization-panel {
+            flex: 1;
+            min-width: 350px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            max-height: 850px;
+            overflow-y: auto;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .preview-panel {
+            flex: 1;
+            min-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .card-container {
+            width: 400px;
+            height: 250px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .card-header {
+            height: 70px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .card-body {
+            display: flex;
+            padding: 15px 20px;
+            height: calc(100% - 120px);
+            transition: background-color 0.3s ease;
+        }
+        
+        .card-footer {
+            height: 50px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: absolute;
+            bottom: 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-frame {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .institution-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: right;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .photo-container {
+            width: 120px;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .photo-placeholder {
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .student-info {
+            flex: 1;
+        }
+        
+        .student-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .student-id {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .student-details {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .address {
+            font-size: 0.85rem;
+            line-height: 1.3;
+            margin-top: 5px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        .date-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        
+        .controls-group {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .controls-group h3 {
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            color: #2c3e50;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+        
+        .control-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .control-item {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #444;
+            font-size: 0.95rem;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .upload-control {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.95rem;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .file-name {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+            padding: 5px;
+        }
+        
+        .color-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .color-picker {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #ddd;
+            transition: all 0.3s;
+        }
+        
+        .color-picker:hover {
+            transform: scale(1.05);
+        }
+        
+        .color-picker input {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+        }
+        
+        .size-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .size-controls .control-item {
+            flex: 1;
+        }
+        
+        .size-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .size-option {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .size-option:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+        
+        .size-option.active {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .size-option small {
+            display: block;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+        
+        .custom-size-inputs {
+            background-color: #f9f9f9;
+            padding: 18px;
+            border-radius: 10px;
+            margin-top: 12px;
+            border: 2px dashed #ddd;
+        }
+        
+        .date-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .date-controls .control-item {
+            flex: 1;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .download-btn {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .reset-btn {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        .instructions {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .instructions h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .signature {
+            font-style: italic;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .barcode {
+            width: 120px;
+            height: 30px;
+            background: repeating-linear-gradient(90deg, #000, #000 2px, transparent 2px, transparent 4px);
+            border: 1px solid #333;
+            border-radius: 3px;
+        }
+        
+        .preview-size-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            font-weight: 500;
+            border: 1px solid #eee;
+        }
+        
+        .size-warning {
+            color: #e74c3c;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .font-selectors {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .font-selector {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .font-selector:hover {
+            border-color: #3498db;
+        }
+        
+        .font-selector.active {
+            border-color: #3498db;
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .font-preview {
+            font-size: 0.8rem;
+            margin-top: 3px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 1100px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .card-container {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .institution-name {
+                font-size: 1.2rem;
+            }
+            
+            .card-container {
+                width: 100%;
+            }
+            
+            .size-options, .font-selectors {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-id-card"></i> Student ID Card Generator</h1>
+            <p class="subtitle">Complete customization with stylish fonts, circular logo frame, and registrar details</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="customization-panel">
+                <div class="controls-group">
+                    <h3><i class="fas fa-user-graduate"></i> Student Information</h3>
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label for="studentName">Full Name</label>
+                            <input type="text" id="studentName" value="Ayesha Rahman">
+                        </div>
+                        <div class="control-item">
+                            <label for="studentId">Student ID</label>
+                            <input type="text" id="studentId" value="STU-2023-7894">
+                        </div>
+                    </div>
+                    
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label for="department">Department</label>
+                            <input type="text" id="department" value="Computer Science & Engineering">
+                        </div>
+                        <div class="control-item">
+                            <label for="batch">Batch</label>
+                            <input type="text" id="batch" value="2023-2024">
+                        </div>
+                    </div>
+                    
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label for="address">Address</label>
+                            <textarea id="address">123/A, Dhanmondi, Dhaka-1209, Bangladesh</textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-group">
+                    <h3><i class="fas fa-user-tie"></i> Registrar Information</h3>
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label for="registrarName">Registrar Name</label>
+                            <input type="text" id="registrarName" value="Prof. Dr. Ahmed Hussain">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-group">
+                    <h3><i class="far fa-calendar-alt"></i> Date Information (Required)</h3>
+                    <div class="date-controls">
+                        <div class="control-item">
+                            <label for="issueDate">Issue Date</label>
+                            <input type="date" id="issueDate" value="2023-09-01" required>
+                        </div>
+                        <div class="control-item">
+                            <label for="expireDate">Expiration Date</label>
+                            <input type="date" id="expireDate" value="2027-06-30" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-group">
+                    <h3><i class="fas fa-upload"></i> Upload Images</h3>
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label>Institution Logo (Circular Frame)</label>
+                            <div class="upload-control">
+                                <div class="upload-btn" id="logoUploadBtn">
+                                    <i class="fas fa-upload"></i> Choose Logo
+                                </div>
+                                <input type="file" id="logoInput" accept="image/*" style="display: none;">
+                                <div class="file-name" id="logoFileName">No logo chosen</div>
+                            </div>
+                        </div>
+                        <div class="control-item">
+                            <label>Student Photo</label>
+                            <div class="upload-control">
+                                <div class="upload-btn" id="photoUploadBtn">
+                                    <i class="fas fa-upload"></i> Choose Photo
+                                </div>
+                                <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                                <div class="file-name" id="photoFileName">No photo chosen</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-group">
+                    <h3><i class="fas fa-expand-alt"></i> Card Size</h3>
+                    <div class="size-options">
+                        <div class="size-option active" data-width="400" data-height="250" id="sizeStandard">
+                            Standard
+                            <small>400 × 250px</small>
+                        </div>
+                        <div class="size-option" data-width="450" data-height="280" id="sizeLarge">
+                            Large
+                            <small>450 × 280px</small>
+                        </div>
+                        <div class="size-option" data-width="350" data-height="220" id="sizeCompact">
+                            Compact
+                            <small>350 × 220px</small>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-size-inputs">
+                        <div class="control-row">
+                            <div class="control-item">
+                                <label for="customWidth">Custom Width (px)</label>
+                                <input type="number" id="customWidth" min="200" max="1000" value="400">
+                                <div class="size-warning" id="widthWarning">Width must be between 200-1000px</div>
+                            </div>
+                            <div class="control-item">
+                                <label for="customHeight">Custom Height (px)</label>
+                                <input type="number" id="customHeight" min="150" max="800" value="250">
+                                <div class="size-warning" id="heightWarning">Height must be between 150-800px</div>
+                            </div>
+                        </div>
+                        <div class="control-row">
+                            <div class="control-item">
+                                <button id="applySizeBtn" style="padding: 12px; margin-top: 5px; background: linear-gradient(to right, #9b59b6, #8e44ad);">
+                                    <i class="fas fa-check"></i> Apply Custom Size
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-group">
+                    <h3><i class="fas fa-font"></i> Font Styles</h3>
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label>Header Font</label>
+                            <div class="font-selectors">
+                                <div class="font-selector active" data-font="Montserrat" id="fontHeaderMontserrat">
+                                    Montserrat
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                                <div class="font-selector" data-font="Poppins" id="fontHeaderPoppins">
+                                    Poppins
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                                <div class="font-selector" data-font="Raleway" id="fontHeaderRaleway">
+                                    Raleway
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-item">
+                            <label>Body Font</label>
+                            <div class="font-selectors">
+                                <div class="font-selector active" data-font="Roboto" id="fontBodyRoboto">
+                                    Roboto
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                                <div class="font-selector" data-font="Open Sans" id="fontBodyOpenSans">
+                                    Open Sans
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                                <div class="font-selector" data-font="Poppins" id="fontBodyPoppins">
+                                    Poppins
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label>Footer Font</label>
+                            <div class="font-selectors">
+                                <div class="font-selector active" data-font="Raleway" id="fontFooterRaleway">
+                                    Raleway
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                                <div class="font-selector" data-font="Montserrat" id="fontFooterMontserrat">
+                                    Montserrat
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                                <div class="font-selector" data-font="Roboto" id="fontFooterRoboto">
+                                    Roboto
+                                    <div class="font-preview">Aa</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-group">
+                    <h3><i class="fas fa-palette"></i> Card Colors</h3>
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label>Card Header Color</label>
+                            <div class="color-controls">
+                                <div class="color-picker">
+                                    <input type="color" id="headerColor" value="#2c3e50">
+                                </div>
+                                <input type="text" id="headerColorText" value="#2c3e50" readonly>
+                            </div>
+                        </div>
+                        <div class="control-item">
+                            <label>Card Body Color</label>
+                            <div class="color-controls">
+                                <div class="color-picker">
+                                    <input type="color" id="bodyColor" value="#ffffff">
+                                </div>
+                                <input type="text" id="bodyColorText" value="#ffffff" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label>Card Footer Color</label>
+                            <div class="color-controls">
+                                <div class="color-picker">
+                                    <input type="color" id="footerColor" value="#3498db">
+                                </div>
+                                <input type="text" id="footerColorText" value="#3498db" readonly>
+                            </div>
+                        </div>
+                        <div class="control-item">
+                            <label for="textColor">Text Color</label>
+                            <div class="color-controls">
+                                <div class="color-picker">
+                                    <input type="color" id="textColor" value="#333333">
+                                </div>
+                                <input type="text" id="textColorText" value="#333333" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-row">
+                        <div class="control-item">
+                            <label for="cardStyle">Card Style</label>
+                            <select id="cardStyle">
+                                <option value="standard">Standard</option>
+                                <option value="modern">Modern</option>
+                                <option value="classic">Classic</option>
+                                <option value="elegant">Elegant</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="generate-btn" id="generateBtn"><i class="fas fa-sync-alt"></i> Generate ID Card</button>
+                    <button class="download-btn" id="downloadBtn"><i class="fas fa-download"></i> Download as Image</button>
+                    <button class="reset-btn" id="resetBtn"><i class="fas fa-redo"></i> Reset</button>
+                </div>
+            </div>
+            
+            <div class="preview-panel">
+                <h2 style="margin-bottom: 20px; color: #2c3e50; font-family: 'Montserrat', sans-serif;">ID Card Preview</h2>
+                <div class="card-container" id="idCard">
+                    <div class="card-header" id="cardHeader">
+                        <div class="logo-container">
+                            <div class="logo-frame" id="logoFrame">
+                                <!-- Circular logo will appear here -->
+                            </div>
+                            <div class="institution-name" id="institutionNamePreview">University of Technology</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body" id="cardBody">
+                        <div class="photo-container" id="photoContainer">
+                            <div class="photo-placeholder">
+                                <i class="fas fa-user-circle" style="font-size: 3rem; color: #aaa; margin-bottom: 5px;"></i>
+                                <div>Student Photo</div>
+                            </div>
+                        </div>
+                        
+                        <div class="student-info">
+                            <div class="student-name" id="previewName">Ayesha Rahman</div>
+                            <div class="student-id" id="previewId">STU-2023-7894</div>
+                            
+                            <div class="student-details">
+                                <div><strong>Department:</strong> <span id="previewDept">Computer Science & Engineering</span></div>
+                                <div><strong>Batch:</strong> <span id="previewBatch">2023-2024</span></div>
+                                <div class="address"><strong>Address:</strong> <span id="previewAddress">123/A, Dhanmondi, Dhaka-1209, Bangladesh</span></div>
+                            </div>
+                            
+                            <div class="date-info">
+                                <div><strong>Issued:</strong> <span id="previewIssueDate">01 Sep 2023</span></div>
+                                <div><strong>Expires:</strong> <span id="previewExpireDate">30 Jun 2027</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer" id="cardFooter">
+                        <div class="signature" id="previewRegistrar">Registrar: Prof. Dr. Ahmed Hussain</div>
+                        <div class="barcode"></div>
+                    </div>
+                </div>
+                
+                <div class="preview-size-info" id="sizeInfo">Size: 400 × 250px</div>
+                <p style="color: #666; font-style: italic; text-align: center; margin-top: 10px; font-family: 'Open Sans', sans-serif;">The generated ID card will appear here</p>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> How to Use This Generator</h3>
+            <ul>
+                <li>Fill in all student information fields (all fields are customizable)</li>
+                <li><strong>Issue Date and Expiration Date are mandatory</strong> - you must set both dates</li>
+                <li>Upload institution logo (will appear in circular frame) and student photo</li>
+                <li>Enter registrar name for the signature section</li>
+                <li>Choose from preset card sizes or enter any custom dimensions</li>
+                <li>Select different stylish fonts for header, body, and footer sections</li>
+                <li>Address text is automatically bold for better readability</li>
+                <li>Customize all card colors including header, body, footer, and text</li>
+                <li>Click "Generate ID Card" to update the preview with your changes</li>
+                <li>Click "Download as Image" to save the ID card to your computer</li>
+                <li>Use "Reset" to clear all fields and start over</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Include html2canvas library for downloading the card as image -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
+    <script>
+        // DOM Elements
+        const studentNameInput = document.getElementById('studentName');
+        const studentIdInput = document.getElementById('studentId');
+        const departmentInput = document.getElementById('department');
+        const batchInput = document.getElementById('batch');
+        const addressInput = document.getElementById('address');
+        const registrarNameInput = document.getElementById('registrarName');
+        const issueDateInput = document.getElementById('issueDate');
+        const expireDateInput = document.getElementById('expireDate');
+        const headerColorInput = document.getElementById('headerColor');
+        const bodyColorInput = document.getElementById('bodyColor');
+        const footerColorInput = document.getElementById('footerColor');
+        const textColorInput = document.getElementById('textColor');
+        const headerColorText = document.getElementById('headerColorText');
+        const bodyColorText = document.getElementById('bodyColorText');
+        const footerColorText = document.getElementById('footerColorText');
+        const textColorText = document.getElementById('textColorText');
+        const cardStyleSelect = document.getElementById('cardStyle');
+        const customWidthInput = document.getElementById('customWidth');
+        const customHeightInput = document.getElementById('customHeight');
+        const applySizeBtn = document.getElementById('applySizeBtn');
+        const widthWarning = document.getElementById('widthWarning');
+        const heightWarning = document.getElementById('heightWarning');
+        
+        // Font selectors
+        const fontHeaderMontserrat = document.getElementById('fontHeaderMontserrat');
+        const fontHeaderPoppins = document.getElementById('fontHeaderPoppins');
+        const fontHeaderRaleway = document.getElementById('fontHeaderRaleway');
+        const fontBodyRoboto = document.getElementById('fontBodyRoboto');
+        const fontBodyOpenSans = document.getElementById('fontBodyOpenSans');
+        const fontBodyPoppins = document.getElementById('fontBodyPoppins');
+        const fontFooterRaleway = document.getElementById('fontFooterRaleway');
+        const fontFooterMontserrat = document.getElementById('fontFooterMontserrat');
+        const fontFooterRoboto = document.getElementById('fontFooterRoboto');
+        
+        // Upload elements
+        const logoInput = document.getElementById('logoInput');
+        const photoInput = document.getElementById('photoInput');
+        const logoUploadBtn = document.getElementById('logoUploadBtn');
+        const photoUploadBtn = document.getElementById('photoUploadBtn');
+        const logoFileName = document.getElementById('logoFileName');
+        const photoFileName = document.getElementById('photoFileName');
+        
+        // Size option buttons
+        const sizeStandard = document.getElementById('sizeStandard');
+        const sizeLarge = document.getElementById('sizeLarge');
+        const sizeCompact = document.getElementById('sizeCompact');
+        const sizeInfo = document.getElementById('sizeInfo');
+        
+        // Preview elements
+        const previewName = document.getElementById('previewName');
+        const previewId = document.getElementById('previewId');
+        const previewDept = document.getElementById('previewDept');
+        const previewBatch = document.getElementById('previewBatch');
+        const previewAddress = document.getElementById('previewAddress');
+        const previewRegistrar = document.getElementById('previewRegistrar');
+        const previewIssueDate = document.getElementById('previewIssueDate');
+        const previewExpireDate = document.getElementById('previewExpireDate');
+        const institutionNamePreview = document.getElementById('institutionNamePreview');
+        const logoFrame = document.getElementById('logoFrame');
+        const photoContainer = document.getElementById('photoContainer');
+        const cardHeader = document.getElementById('cardHeader');
+        const cardBody = document.getElementById('cardBody');
+        const cardFooter = document.getElementById('cardFooter');
+        const idCard = document.getElementById('idCard');
+        
+        // Buttons
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        
+        // Variables to store uploaded images
+        let uploadedLogo = null;
+        let uploadedPhoto = null;
+        
+        // Current card dimensions
+        let currentWidth = 400;
+        let currentHeight = 250;
+        
+        // Current font selections
+        let currentHeaderFont = 'Montserrat';
+        let currentBodyFont = 'Roboto';
+        let currentFooterFont = 'Raleway';
+        
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+        
+        // Update color text inputs when color pickers change
+        headerColorInput.addEventListener('input', function() {
+            headerColorText.value = this.value;
+            updateCard();
+        });
+        
+        bodyColorInput.addEventListener('input', function() {
+            bodyColorText.value = this.value;
+            updateCard();
+        });
+        
+        footerColorInput.addEventListener('input', function() {
+            footerColorText.value = this.value;
+            updateCard();
+        });
+        
+        textColorInput.addEventListener('input', function() {
+            textColorText.value = this.value;
+            updateCard();
+        });
+        
+        // Handle font selection
+        function selectFont(element, fontType, fontName) {
+            // Remove active class from all font selectors of this type
+            const allSelectors = document.querySelectorAll(`[id^="font${fontType}"]`);
+            allSelectors.forEach(selector => {
+                selector.classList.remove('active');
+            });
+            
+            // Add active class to selected font
+            element.classList.add('active');
+            
+            // Update current font
+            if (fontType === 'Header') currentHeaderFont = fontName;
+            if (fontType === 'Body') currentBodyFont = fontName;
+            if (fontType === 'Footer') currentFooterFont = fontName;
+            
+            updateCard();
+        }
+        
+        // Set up font selector click handlers
+        fontHeaderMontserrat.addEventListener('click', function() {
+            selectFont(this, 'Header', 'Montserrat');
+        });
+        
+        fontHeaderPoppins.addEventListener('click', function() {
+            selectFont(this, 'Header', 'Poppins');
+        });
+        
+        fontHeaderRaleway.addEventListener('click', function() {
+            selectFont(this, 'Header', 'Raleway');
+        });
+        
+        fontBodyRoboto.addEventListener('click', function() {
+            selectFont(this, 'Body', 'Roboto');
+        });
+        
+        fontBodyOpenSans.addEventListener('click', function() {
+            selectFont(this, 'Body', 'Open Sans');
+        });
+        
+        fontBodyPoppins.addEventListener('click', function() {
+            selectFont(this, 'Body', 'Poppins');
+        });
+        
+        fontFooterRaleway.addEventListener('click', function() {
+            selectFont(this, 'Footer', 'Raleway');
+        });
+        
+        fontFooterMontserrat.addEventListener('click', function() {
+            selectFont(this, 'Footer', 'Montserrat');
+        });
+        
+        fontFooterRoboto.addEventListener('click', function() {
+            selectFont(this, 'Footer', 'Roboto');
+        });
+        
+        // Handle logo upload
+        logoUploadBtn.addEventListener('click', function() {
+            logoInput.click();
+        });
+        
+        logoInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                logoFileName.textContent = file.name;
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    uploadedLogo = event.target.result;
+                    updateCard();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Handle photo upload
+        photoUploadBtn.addEventListener('click', function() {
+            photoInput.click();
+        });
+        
+        photoInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                photoFileName.textContent = file.name;
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    uploadedPhoto = event.target.result;
+                    updateCard();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Handle size selection
+        function selectSize(element, width, height) {
+            // Remove active class from all size options
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Add active class to selected option
+            element.classList.add('active');
+            
+            // Update custom inputs
+            customWidthInput.value = width;
+            customHeightInput.value = height;
+            
+            // Update card dimensions
+            updateCardSize(width, height);
+        }
+        
+        // Set up size option click handlers
+        sizeStandard.addEventListener('click', function() {
+            selectSize(this, 400, 250);
+        });
+        
+        sizeLarge.addEventListener('click', function() {
+            selectSize(this, 450, 280);
+        });
+        
+        sizeCompact.addEventListener('click', function() {
+            selectSize(this, 350, 220);
+        });
+        
+        // Handle custom size validation
+        function validateSizeInput(input, min, max, warningElement) {
+            const value = parseInt(input.value);
+            if (isNaN(value) || value < min || value > max) {
+                warningElement.style.display = 'block';
+                return false;
+            } else {
+                warningElement.style.display = 'none';
+                return true;
+            }
+        }
+        
+        // Apply custom size button
+        applySizeBtn.addEventListener('click', function() {
+            const widthValid = validateSizeInput(customWidthInput, 200, 1000, widthWarning);
+            const heightValid = validateSizeInput(customHeightInput, 150, 800, heightWarning);
+            
+            if (widthValid && heightValid) {
+                const width = parseInt(customWidthInput.value);
+                const height = parseInt(customHeightInput.value);
+                
+                // Remove active class from all size options
+                document.querySelectorAll('.size-option').forEach(option => {
+                    option.classList.remove('active');
+                });
+                
+                updateCardSize(width, height);
+                alert(`Card size updated to ${width} × ${height}px`);
+            } else {
+                alert("Please enter valid dimensions. Width: 200-1000px, Height: 150-800px");
+            }
+        });
+        
+        // Allow Enter key to apply custom size
+        customWidthInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applySizeBtn.click();
+            }
+        });
+        
+        customHeightInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                applySizeBtn.click();
+            }
+        });
+        
+        // Update card size function
+        function updateCardSize(width, height) {
+            // Update current dimensions
+            currentWidth = width;
+            currentHeight = height;
+            
+            // Update custom inputs
+            customWidthInput.value = width;
+            customHeightInput.value = height;
+            
+            // Update card size
+            idCard.style.width = width + 'px';
+            idCard.style.height = height + 'px';
+            
+            // Update size info text
+            sizeInfo.textContent = `Size: ${width} × ${height}px`;
+            
+            // Update font sizes based on card size
+            updateFontSizes(width, height);
+            
+            updateCard();
+        }
+        
+        // Adjust font sizes based on card dimensions
+        function updateFontSizes(width, height) {
+            const baseWidth = 400;
+            const baseHeight = 250;
+            
+            // Calculate size factor
+            const widthFactor = width / baseWidth;
+            const heightFactor = height / baseHeight;
+            const sizeFactor = Math.min(widthFactor, heightFactor);
+            
+            // Update font sizes (with minimum sizes)
+            const studentNameSize = Math.max(1.2, 1.5 * sizeFactor);
+            const studentIdSize = Math.max(0.9, 1.1 * sizeFactor);
+            const institutionNameSize = Math.max(1.2, 1.5 * sizeFactor);
+            const detailsSize = Math.max(0.75, 0.9 * sizeFactor);
+            const addressSize = Math.max(0.7, 0.85 * sizeFactor);
+            const dateSize = Math.max(0.65, 0.8 * sizeFactor);
+            const signatureSize = Math.max(0.65, 0.8 * sizeFactor);
+            
+            document.querySelector('.student-name').style.fontSize = studentNameSize + 'rem';
+            document.querySelector('.student-id').style.fontSize = studentIdSize + 'rem';
+            document.querySelector('.institution-name').style.fontSize = institutionNameSize + 'rem';
+            document.querySelector('.student-details').style.fontSize = detailsSize + 'rem';
+            document.querySelector('.address').style.fontSize = addressSize + 'rem';
+            document.querySelector('.date-info').style.fontSize = dateSize + 'rem';
+            document.querySelector('.signature').style.fontSize = signatureSize + 'rem';
+            
+            // Adjust header and footer heights proportionally
+            const headerHeight = 70 * (height / baseHeight);
+            const footerHeight = 50 * (height / baseHeight);
+            
+            cardHeader.style.height = headerHeight + 'px';
+            cardFooter.style.height = footerHeight + 'px';
+            cardBody.style.height = `calc(100% - ${headerHeight + footerHeight}px)`;
+            
+            // Adjust photo container size
+            const photoWidth = Math.max(80, 120 * sizeFactor);
+            const photoHeight = Math.max(100, 150 * sizeFactor);
+            
+            photoContainer.style.width = photoWidth + 'px';
+            photoContainer.style.height = photoHeight + 'px';
+            
+            // Adjust logo frame size
+            const logoSize = Math.max(35, 50 * sizeFactor);
+            logoFrame.style.width = logoSize + 'px';
+            logoFrame.style.height = logoSize + 'px';
+            
+            // Adjust barcode size
+            const barcode = document.querySelector('.barcode');
+            barcode.style.width = Math.max(80, 120 * sizeFactor) + 'px';
+            barcode.style.height = Math.max(20, 30 * sizeFactor) + 'px';
+        }
+        
+        // Apply fonts to elements
+        function applyFonts() {
+            // Apply header font
+            const headerElements = [institutionNamePreview];
+            headerElements.forEach(el => {
+                el.style.fontFamily = currentHeaderFont + ', sans-serif';
+            });
+            
+            // Apply body font
+            const bodyElements = [
+                previewName, previewId, previewDept, previewBatch, 
+                previewAddress, previewIssueDate, previewExpireDate,
+                document.querySelector('.student-details'), 
+                document.querySelector('.date-info')
+            ];
+            bodyElements.forEach(el => {
+                if (el) el.style.fontFamily = currentBodyFont + ', sans-serif';
+            });
+            
+            // Apply footer font
+            const footerElements = [previewRegistrar];
+            footerElements.forEach(el => {
+                el.style.fontFamily = currentFooterFont + ', sans-serif';
+            });
+        }
+        
+        // Update card when any input changes
+        const inputs = [
+            studentNameInput, studentIdInput, departmentInput, batchInput,
+            addressInput, registrarNameInput, issueDateInput, expireDateInput,
+            cardStyleSelect
+        ];
+        
+        inputs.forEach(input => {
+            input.addEventListener('input', updateCard);
+        });
+        
+        // Generate/Update the ID card
+        function updateCard() {
+            // Update student information
+            previewName.textContent = studentNameInput.value || "Student Name";
+            previewId.textContent = studentIdInput.value || "STU-XXXX-XXXX";
+            previewDept.textContent = departmentInput.value || "Department";
+            previewBatch.textContent = batchInput.value || "Batch";
+            previewAddress.textContent = addressInput.value || "Student Address";
+            previewRegistrar.textContent = registrarNameInput.value ? `Registrar: ${registrarNameInput.value}` : "Registrar's Signature";
+            
+            // Format and update dates
+            const issueDate = issueDateInput.value ? formatDate(issueDateInput.value) : "Issue Date";
+            const expireDate = expireDateInput.value ? formatDate(expireDateInput.value) : "Expire Date";
+            
+            previewIssueDate.textContent = issueDate;
+            previewExpireDate.textContent = expireDate;
+            
+            // Update institution name
+            institutionNamePreview.textContent = "University of Technology";
+            
+            // Update logo in circular frame
+            logoFrame.innerHTML = '';
+            if (uploadedLogo) {
+                const logoImg = document.createElement('img');
+                logoImg.src = uploadedLogo;
+                logoImg.alt = "Institution Logo";
+                logoFrame.appendChild(logoImg);
+            } else {
+                // Show icon if no logo
+                const icon = document.createElement('i');
+                icon.className = "fas fa-university";
+                icon.style.fontSize = "1.5rem";
+                icon.style.color = "#555";
+                logoFrame.appendChild(icon);
+            }
+            
+            // Update photo
+            const photoPlaceholder = photoContainer.querySelector('.photo-placeholder');
+            if (uploadedPhoto) {
+                if (photoPlaceholder) photoPlaceholder.style.display = 'none';
+                
+                let photoImg = photoContainer.querySelector('img');
+                if (!photoImg) {
+                    photoImg = document.createElement('img');
+                    photoImg.alt = "Student Photo";
+                    photoContainer.appendChild(photoImg);
+                }
+                photoImg.src = uploadedPhoto;
+            } else {
+                if (photoPlaceholder) photoPlaceholder.style.display = 'flex';
+                const existingPhoto = photoContainer.querySelector('img');
+                if (existingPhoto) existingPhoto.remove();
+            }
+            
+            // Apply fonts
+            applyFonts();
+            
+            // Update colors
+            cardHeader.style.backgroundColor = headerColorInput.value;
+            cardBody.style.backgroundColor = bodyColorInput.value;
+            cardFooter.style.backgroundColor = footerColorInput.value;
+            
+            // Update text color
+            const textColor = textColorInput.value;
+            cardBody.style.color = textColor;
+            previewName.style.color = textColor;
+            previewId.style.color = textColor;
+            institutionNamePreview.style.color = textColor;
+            
+            // Make address text bold (already in CSS but ensuring)
+            previewAddress.style.fontWeight = '600';
+            
+            // Update card style
+            const cardStyle = cardStyleSelect.value;
+            
+            if (cardStyle === 'modern') {
+                idCard.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.25)';
+                idCard.style.border = 'none';
+                cardHeader.style.borderRadius = '15px 15px 0 0';
+                cardHeader.style.background = `linear-gradient(135deg, ${headerColorInput.value}, ${adjustColor(headerColorInput.value, 20)})`;
+            } else if (cardStyle === 'classic') {
+                idCard.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+                idCard.style.border = '3px solid #8b7355';
+                cardHeader.style.backgroundColor = '#8b7355';
+                cardFooter.style.backgroundColor = '#8b7355';
+            } else if (cardStyle === 'elegant') {
+                idCard.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)';
+                idCard.style.border = '2px solid #e0e0e0';
+                cardHeader.style.background = `linear-gradient(90deg, ${headerColorInput.value}, ${adjustColor(headerColorInput.value, 30)})`;
+                cardFooter.style.background = `linear-gradient(90deg, ${footerColorInput.value}, ${adjustColor(footerColorInput.value, 30)})`;
+            } else {
+                idCard.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)';
+                idCard.style.border = '1px solid #ddd';
+            }
+        }
+        
+        // Helper function to adjust color brightness
+        function adjustColor(color, amount) {
+            // Simple color adjustment for gradients
+            return color;
+        }
+        
+        // Generate button click
+        generateBtn.addEventListener('click', function() {
+            // Validate required date fields
+            if (!issueDateInput.value || !expireDateInput.value) {
+                alert("Please fill in both Issue Date and Expiration Date");
+                return;
+            }
+            
+            updateCard();
+            alert("ID Card generated successfully!");
+        });
+        
+        // Download as image
+        downloadBtn.addEventListener('click', function() {
+            // Validate required date fields
+            if (!issueDateInput.value || !expireDateInput.value) {
+                alert("Please fill in both Issue Date and Expiration Date before downloading");
+                return;
+            }
+            
+            html2canvas(idCard).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `student-id-${studentIdInput.value || 'card'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+        
+        // Reset all fields
+        resetBtn.addEventListener('click', function() {
+            if (confirm("Are you sure you want to reset all fields? This will clear all customizations and uploaded images.")) {
+                studentNameInput.value = '';
+                studentIdInput.value = '';
+                departmentInput.value = '';
+                batchInput.value = '';
+                addressInput.value = '';
+                registrarNameInput.value = 'Prof. Dr. Ahmed Hussain';
+                issueDateInput.value = '';
+                expireDateInput.value = '';
+                headerColorInput.value = '#2c3e50';
+                bodyColorInput.value = '#ffffff';
+                footerColorInput.value = '#3498db';
+                textColorInput.value = '#333333';
+                headerColorText.value = '#2c3e50';
+                bodyColorText.value = '#ffffff';
+                footerColorText.value = '#3498db';
+                textColorText.value = '#333333';
+                cardStyleSelect.value = 'standard';
+                
+                // Reset fonts
+                selectFont(fontHeaderMontserrat, 'Header', 'Montserrat');
+                selectFont(fontBodyRoboto, 'Body', 'Roboto');
+                selectFont(fontFooterRaleway, 'Footer', 'Raleway');
+                
+                // Reset size
+                selectSize(sizeStandard, 400, 250);
+                widthWarning.style.display = 'none';
+                heightWarning.style.display = 'none';
+                
+                // Reset uploads
+                logoInput.value = '';
+                photoInput.value = '';
+                logoFileName.textContent = 'No logo chosen';
+                photoFileName.textContent = 'No photo chosen';
+                uploadedLogo = null;
+                uploadedPhoto = null;
+                
+                updateCard();
+            }
+        });
+        
+        // Set minimum date for expiration date to be after issue date
+        issueDateInput.addEventListener('change', function() {
+            expireDateInput.min = this.value;
+            
+            // If expire date is before issue date, reset it
+            if (expireDateInput.value && expireDateInput.value < this.value) {
+                expireDateInput.value = '';
+            }
+        });
+        
+        // Set current date as default for issue date and 4 years later for expiration
+        const today = new Date();
+        const defaultIssueDate = today.toISOString().split('T')[0];
+        
+        const futureDate = new Date(today);
+        futureDate.setFullYear(futureDate.getFullYear() + 4);
+        const defaultExpireDate = futureDate.toISOString().split('T')[0];
+        
+        issueDateInput.value = defaultIssueDate;
+        expireDateInput.value = defaultExpireDate;
+        expireDateInput.min = defaultIssueDate;
+        
+        // Initialize the card on page load
+        updateCard();
+        updateFontSizes(currentWidth, currentHeight);
+    </script>
+</body>
+</html>
