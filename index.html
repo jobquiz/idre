@@ -101,12 +101,12 @@
         .card-body {
             display: flex;
             padding: 15px 20px;
-            height: calc(100% - 120px);
+            height: calc(100% - 110px); /* Adjusted for footer */
             transition: background-color 0.3s ease;
         }
         
         .card-footer {
-            height: 50px;
+            height: 40px; /* Footer height */
             width: 100%;
             display: flex;
             justify-content: space-between;
@@ -114,6 +114,7 @@
             padding: 0 20px;
             position: absolute;
             bottom: 0;
+            font-size: 0.75rem;
         }
         
         .logo-container {
@@ -441,6 +442,19 @@
             box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
         }
         
+        .serial-btn {
+            background: linear-gradient(to right, #9b59b6, #8e44ad);
+            color: white;
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.3);
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .serial-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(155, 89, 182, 0.4);
+        }
+        
         .instructions {
             background-color: white;
             border-radius: 15px;
@@ -467,18 +481,26 @@
             line-height: 1.5;
         }
         
-        .signature {
-            font-style: italic;
-            font-size: 0.8rem;
-            font-weight: 500;
+        .serial-info {
+            font-family: monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #333;
         }
         
-        .barcode {
-            width: 120px;
-            height: 30px;
-            background: repeating-linear-gradient(90deg, #000, #000 2px, transparent 2px, transparent 4px);
-            border: 1px solid #333;
-            border-radius: 3px;
+        .registrar-info {
+            font-size: 0.75rem;
+            font-style: italic;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
         }
         
         .preview-size-info {
@@ -536,6 +558,24 @@
             opacity: 0.8;
         }
         
+        .serial-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .serial-display {
+            flex: 1;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            font-family: monospace;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
         @media (max-width: 1100px) {
             .main-content {
                 flex-direction: column;
@@ -570,7 +610,7 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-id-card"></i> Student ID Card Generator</h1>
-            <p class="subtitle">Complete customization with stylish fonts, circular logo frame, and registrar details</p>
+            <p class="subtitle">Complete customization with registrar name in footer and clean design</p>
         </header>
         
         <div class="main-content">
@@ -614,6 +654,16 @@
                             <label for="registrarName">Registrar Name</label>
                             <input type="text" id="registrarName" value="Prof. Dr. Ahmed Hussain">
                         </div>
+                    </div>
+                </div>
+                
+                <div class="controls-group">
+                    <h3><i class="fas fa-hashtag"></i> ID Card Serial Number</h3>
+                    <div class="serial-controls">
+                        <div class="serial-display" id="serialDisplay">ID-7894-2023</div>
+                        <button class="serial-btn" id="generateSerialBtn">
+                            <i class="fas fa-random"></i> Generate Random
+                        </button>
                     </div>
                 </div>
                 
@@ -859,8 +909,10 @@
                     </div>
                     
                     <div class="card-footer" id="cardFooter">
-                        <div class="signature" id="previewRegistrar">Registrar: Prof. Dr. Ahmed Hussain</div>
-                        <div class="barcode"></div>
+                        <div class="footer-content">
+                            <div class="serial-info" id="previewSerial">ID-7894-2023</div>
+                            <div class="registrar-info" id="previewRegistrar">Registrar: Prof. Dr. Ahmed Hussain</div>
+                        </div>
                     </div>
                 </div>
                 
@@ -875,11 +927,13 @@
                 <li>Fill in all student information fields (all fields are customizable)</li>
                 <li><strong>Issue Date and Expiration Date are mandatory</strong> - you must set both dates</li>
                 <li>Upload institution logo (will appear in circular frame) and student photo</li>
-                <li>Enter registrar name for the signature section</li>
+                <li>Enter registrar name - appears in footer as "Registrar: [Name]"</li>
+                <li>Generate random ID card serial number or use custom one</li>
                 <li>Choose from preset card sizes or enter any custom dimensions</li>
                 <li>Select different stylish fonts for header, body, and footer sections</li>
                 <li>Address text is automatically bold for better readability</li>
                 <li>Customize all card colors including header, body, footer, and text</li>
+                <li><strong>Downloaded images will have rounded corners (15px radius)</strong></li>
                 <li>Click "Generate ID Card" to update the preview with your changes</li>
                 <li>Click "Download as Image" to save the ID card to your computer</li>
                 <li>Use "Reset" to clear all fields and start over</li>
@@ -914,6 +968,8 @@
         const applySizeBtn = document.getElementById('applySizeBtn');
         const widthWarning = document.getElementById('widthWarning');
         const heightWarning = document.getElementById('heightWarning');
+        const generateSerialBtn = document.getElementById('generateSerialBtn');
+        const serialDisplay = document.getElementById('serialDisplay');
         
         // Font selectors
         const fontHeaderMontserrat = document.getElementById('fontHeaderMontserrat');
@@ -946,6 +1002,7 @@
         const previewDept = document.getElementById('previewDept');
         const previewBatch = document.getElementById('previewBatch');
         const previewAddress = document.getElementById('previewAddress');
+        const previewSerial = document.getElementById('previewSerial');
         const previewRegistrar = document.getElementById('previewRegistrar');
         const previewIssueDate = document.getElementById('previewIssueDate');
         const previewExpireDate = document.getElementById('previewExpireDate');
@@ -975,12 +1032,34 @@
         let currentBodyFont = 'Roboto';
         let currentFooterFont = 'Raleway';
         
+        // Current serial number
+        let currentSerial = 'ID-7894-2023';
+        
         // Format date for display
         function formatDate(dateString) {
             const date = new Date(dateString);
             const options = { day: 'numeric', month: 'short', year: 'numeric' };
             return date.toLocaleDateString('en-US', options);
         }
+        
+        // Generate random serial number
+        function generateRandomSerial() {
+            const prefix = 'ID';
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const year = new Date().getFullYear();
+            const newSerial = `${prefix}-${randomNum}-${year}`;
+            
+            currentSerial = newSerial;
+            serialDisplay.textContent = newSerial;
+            previewSerial.textContent = newSerial;
+            
+            return newSerial;
+        }
+        
+        // Generate random serial button click
+        generateSerialBtn.addEventListener('click', function() {
+            generateRandomSerial();
+        });
         
         // Update color text inputs when color pickers change
         headerColorInput.addEventListener('input', function() {
@@ -1214,7 +1293,8 @@
             const detailsSize = Math.max(0.75, 0.9 * sizeFactor);
             const addressSize = Math.max(0.7, 0.85 * sizeFactor);
             const dateSize = Math.max(0.65, 0.8 * sizeFactor);
-            const signatureSize = Math.max(0.65, 0.8 * sizeFactor);
+            const serialSize = Math.max(0.6, 0.75 * sizeFactor);
+            const registrarSize = Math.max(0.6, 0.75 * sizeFactor);
             
             document.querySelector('.student-name').style.fontSize = studentNameSize + 'rem';
             document.querySelector('.student-id').style.fontSize = studentIdSize + 'rem';
@@ -1222,11 +1302,12 @@
             document.querySelector('.student-details').style.fontSize = detailsSize + 'rem';
             document.querySelector('.address').style.fontSize = addressSize + 'rem';
             document.querySelector('.date-info').style.fontSize = dateSize + 'rem';
-            document.querySelector('.signature').style.fontSize = signatureSize + 'rem';
+            document.querySelector('.serial-info').style.fontSize = serialSize + 'rem';
+            document.querySelector('.registrar-info').style.fontSize = registrarSize + 'rem';
             
             // Adjust header and footer heights proportionally
             const headerHeight = 70 * (height / baseHeight);
-            const footerHeight = 50 * (height / baseHeight);
+            const footerHeight = 40 * (height / baseHeight); // Footer height
             
             cardHeader.style.height = headerHeight + 'px';
             cardFooter.style.height = footerHeight + 'px';
@@ -1243,11 +1324,6 @@
             const logoSize = Math.max(35, 50 * sizeFactor);
             logoFrame.style.width = logoSize + 'px';
             logoFrame.style.height = logoSize + 'px';
-            
-            // Adjust barcode size
-            const barcode = document.querySelector('.barcode');
-            barcode.style.width = Math.max(80, 120 * sizeFactor) + 'px';
-            barcode.style.height = Math.max(20, 30 * sizeFactor) + 'px';
         }
         
         // Apply fonts to elements
@@ -1270,9 +1346,9 @@
             });
             
             // Apply footer font
-            const footerElements = [previewRegistrar];
+            const footerElements = [previewSerial, previewRegistrar];
             footerElements.forEach(el => {
-                el.style.fontFamily = currentFooterFont + ', sans-serif';
+                if (el) el.style.fontFamily = currentFooterFont + ', sans-serif';
             });
         }
         
@@ -1287,6 +1363,12 @@
             input.addEventListener('input', updateCard);
         });
         
+        // Update serial display when serial changes
+        serialDisplay.addEventListener('input', function() {
+            currentSerial = this.textContent;
+            previewSerial.textContent = currentSerial;
+        });
+        
         // Generate/Update the ID card
         function updateCard() {
             // Update student information
@@ -1295,7 +1377,8 @@
             previewDept.textContent = departmentInput.value || "Department";
             previewBatch.textContent = batchInput.value || "Batch";
             previewAddress.textContent = addressInput.value || "Student Address";
-            previewRegistrar.textContent = registrarNameInput.value ? `Registrar: ${registrarNameInput.value}` : "Registrar's Signature";
+            previewSerial.textContent = currentSerial;
+            previewRegistrar.textContent = registrarNameInput.value ? `Registrar: ${registrarNameInput.value}` : "Registrar: Not Specified";
             
             // Format and update dates
             const issueDate = issueDateInput.value ? formatDate(issueDateInput.value) : "Issue Date";
@@ -1355,6 +1438,8 @@
             previewName.style.color = textColor;
             previewId.style.color = textColor;
             institutionNamePreview.style.color = textColor;
+            previewSerial.style.color = textColor;
+            previewRegistrar.style.color = textColor;
             
             // Make address text bold (already in CSS but ensuring)
             previewAddress.style.fontWeight = '600';
@@ -1401,7 +1486,43 @@
             alert("ID Card generated successfully!");
         });
         
-        // Download as image
+        // Function to create image with rounded corners
+        function createRoundedCanvas(originalCanvas) {
+            // Create a new canvas with the same dimensions
+            const roundedCanvas = document.createElement('canvas');
+            roundedCanvas.width = originalCanvas.width;
+            roundedCanvas.height = originalCanvas.height;
+            const ctx = roundedCanvas.getContext('2d');
+            
+            // Set the corner radius (15px or proportional to size)
+            const cornerRadius = Math.min(15, originalCanvas.width * 0.0375);
+            
+            // Clear the canvas
+            ctx.clearRect(0, 0, roundedCanvas.width, roundedCanvas.height);
+            
+            // Create rounded rectangle path
+            ctx.beginPath();
+            ctx.moveTo(cornerRadius, 0);
+            ctx.lineTo(roundedCanvas.width - cornerRadius, 0);
+            ctx.quadraticCurveTo(roundedCanvas.width, 0, roundedCanvas.width, cornerRadius);
+            ctx.lineTo(roundedCanvas.width, roundedCanvas.height - cornerRadius);
+            ctx.quadraticCurveTo(roundedCanvas.width, roundedCanvas.height, roundedCanvas.width - cornerRadius, roundedCanvas.height);
+            ctx.lineTo(cornerRadius, roundedCanvas.height);
+            ctx.quadraticCurveTo(0, roundedCanvas.height, 0, roundedCanvas.height - cornerRadius);
+            ctx.lineTo(0, cornerRadius);
+            ctx.quadraticCurveTo(0, 0, cornerRadius, 0);
+            ctx.closePath();
+            
+            // Clip to the rounded rectangle
+            ctx.clip();
+            
+            // Draw the original image
+            ctx.drawImage(originalCanvas, 0, 0);
+            
+            return roundedCanvas;
+        }
+        
+        // Download as image with rounded corners
         downloadBtn.addEventListener('click', function() {
             // Validate required date fields
             if (!issueDateInput.value || !expireDateInput.value) {
@@ -1409,10 +1530,26 @@
                 return;
             }
             
-            html2canvas(idCard).then(canvas => {
+            // Temporarily add rounded corners to the card for capture
+            const originalBorderRadius = idCard.style.borderRadius;
+            idCard.style.borderRadius = '15px';
+            
+            html2canvas(idCard, {
+                backgroundColor: null,
+                scale: 2, // Higher quality
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                // Restore original border radius
+                idCard.style.borderRadius = originalBorderRadius;
+                
+                // Create canvas with rounded corners
+                const roundedCanvas = createRoundedCanvas(canvas);
+                
+                // Create download link
                 const link = document.createElement('a');
                 link.download = `student-id-${studentIdInput.value || 'card'}.png`;
-                link.href = canvas.toDataURL('image/png');
+                link.href = roundedCanvas.toDataURL('image/png');
                 link.click();
             });
         });
@@ -1437,6 +1574,10 @@
                 footerColorText.value = '#3498db';
                 textColorText.value = '#333333';
                 cardStyleSelect.value = 'standard';
+                
+                // Reset serial
+                currentSerial = 'ID-7894-2023';
+                serialDisplay.textContent = currentSerial;
                 
                 // Reset fonts
                 selectFont(fontHeaderMontserrat, 'Header', 'Montserrat');
